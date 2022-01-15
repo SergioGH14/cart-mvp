@@ -3,9 +3,10 @@ package es.segohe.cartmvp.application
 import es.segohe.cartmvp.domain.model.Cart
 import es.segohe.cartmvp.domain.model.Product
 import es.segohe.cartmvp.domain.model.id.CartId
+import es.segohe.cartmvp.domain.model.id.ProductId
 import es.segohe.cartmvp.domain.repositoy.CartRepository
 import es.segohe.cartmvp.domain.repositoy.ProductRepository
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class CartController(
@@ -13,21 +14,33 @@ class CartController(
     val cartRepository: CartRepository
 ) {
 
-    fun getProducts(): List<Product>? {
-        return productRepository.findAll()
+    @GetMapping("/products")
+    fun getProducts(): List<Product.ProductData>? {
+        return productRepository.findAll()?.map { it.toData() }
     }
 
+    @PostMapping("/carts")
     fun createCart(): String {
         val id = CartId()
-        cartRepository.save(Cart(CartId()))
+        cartRepository.save(Cart(id))
         return id.toString()
     }
-
-    fun findCart(id:String){
-        cartRepository.find(CartId(id))
+    @GetMapping("/carts/{id}")
+    fun findCart(@PathVariable id: String): Cart.CartData? {
+        return cartRepository.find(CartId(id))?.toData()
     }
 
-    fun payCart(id:String){
+    @PutMapping("/carts/{id}")
+    fun addProductsToCart(@RequestBody products: List<String>, @PathVariable id: String){
+        val cart = cartRepository.find(CartId(id))
+        require(cart!=null)
+        require(products.all { productRepository.find(ProductId(it)) != null })
+        products.forEach { cart.addProduct(productRepository.find(ProductId(it))!!) }
+        cartRepository.save(cart)
+    }
+
+    @PostMapping("/carts/{id}")
+    fun payCart(@PathVariable id: String){
         val cart = cartRepository.find(CartId(id))
         require(cart!=null)
         cart.payCart()
