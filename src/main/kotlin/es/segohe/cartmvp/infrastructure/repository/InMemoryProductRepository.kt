@@ -7,11 +7,9 @@ import es.segohe.cartmvp.infrastructure.common.InMemoryRepository
 import org.springframework.stereotype.Repository
 import java.lang.Math.random
 
-@Repository
-class InMemoryProductRepository : InMemoryRepository<Product, ProductId>(), ProductRepository {
 
-    init {
+open class InMemoryProductRepository : InMemoryRepository<Product, ProductId>(), ProductRepository {
+    final fun mockDatabase(){
         repeat(50) { database[ProductId(it.toString())] = Product(ProductId(it.toString()), random(),"Sample product $it")}
     }
-
 }

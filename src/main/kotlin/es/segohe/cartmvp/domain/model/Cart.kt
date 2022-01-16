@@ -22,6 +22,8 @@ class Cart(id: CartId) : Entity<CartId>(id) {
         return products.map { it.price }.reduce { acc, product -> acc + product }
     }
 
+    fun getProducts() = products.toList()
+    fun isPaid() = isPaid
 
     fun toData(): CartData {
 
