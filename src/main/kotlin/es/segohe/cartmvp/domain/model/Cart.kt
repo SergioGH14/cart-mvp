@@ -22,15 +22,15 @@ class Cart(id: CartId) : Entity<CartId>(id) {
         return products.map { it.price }.reduce { acc, product -> acc + product }
     }
 
-    fun getProducts() = products.toList()
+    fun getProducts() = products.map{it.toData()}.toList()
     fun isPaid() = isPaid
 
     fun toData(): CartData {
 
-        return CartData(id.toString(), products, isPaid, getTotalPrice())
+        return CartData(id.toString(), getProducts(), isPaid, getTotalPrice())
     }
 
 
-    data class CartData(val id: String, val products: List<Product>, val isPaid: Boolean, val price: Double)
+    data class CartData(val id: String, val products: List<Product.ProductData>, val isPaid: Boolean, val price: Double)
 
 }

@@ -1,7 +1,8 @@
 package es.segohe.cartmvp.application
 
 import es.segohe.cartmvp.domain.model.Cart
-import es.segohe.cartmvp.domain.model.Product
+import es.segohe.cartmvp.domain.model.Cart.CartData
+import es.segohe.cartmvp.domain.model.Product.ProductData
 import es.segohe.cartmvp.domain.model.id.CartId
 import es.segohe.cartmvp.domain.model.id.ProductId
 import es.segohe.cartmvp.domain.repositoy.CartRepository
@@ -15,7 +16,7 @@ class CartController(
 ) {
 
     @GetMapping("/products")
-    fun getProducts(): List<Product.ProductData>? {
+    fun getProducts(): List<ProductData>? {
         return productRepository.findAll()?.map { it.toData() }
     }
 
@@ -26,7 +27,7 @@ class CartController(
         return id.toString()
     }
     @GetMapping("/carts/{id}")
-    fun findCart(@PathVariable id: String): Cart.CartData? {
+    fun findCart(@PathVariable id: String): CartData? {
         return cartRepository.find(CartId(id))?.toData()
     }
 
@@ -39,7 +40,7 @@ class CartController(
         cartRepository.save(cart)
     }
 
-    @PostMapping("/carts/{id}")
+    @PostMapping("/carts/{id}/pay")
     fun payCart(@PathVariable id: String){
         val cart = cartRepository.find(CartId(id))
         require(cart!=null)
