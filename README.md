@@ -29,5 +29,5 @@ remain flexible.
 /gradlew test
 ```
 
-###Swagger
+### Swagger
 There is a swagger interface available in [localhost:8080/](http://localhost:8080/)
