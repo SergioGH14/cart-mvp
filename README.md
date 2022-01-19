@@ -1,6 +1,6 @@
 # cart-mvp
 
-This project is the source code for [this](https://www.google.com) article.
+This project is the source code for [this](https://dev.to/sergiogh14/construyendo-un-mvp-sin-base-de-datos-1i4k) article.
 
 ## Use case
 
